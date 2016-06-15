@@ -11,6 +11,18 @@ var paddle2Y = 250;
 const PADDLE_THICKNESS = 10;
 const PADDLE_HEIGHT = 100;
 
+
+function calculateMousePos(evt) {
+	var rect = canvas.getBoundingClientRect();
+	var root = document.documentElement;
+	var mouseX = evt.clientX - rect.left - root.scrollLeft;
+	var mouseY = evt.clientY - rect.top - root.scrollTop;
+	return {
+		x:mouseX,
+		y:mouseY
+	};
+}
+
 function ballReset() {
 	ballSpeedX = -ballSpeedX;
 	ballX = canvas.width / 2;
@@ -95,4 +107,9 @@ window.onload = function() {
 			moveEverything();
 			drawEverything();
 	}, 1000/fps);
+
+	canvas.addEventListener('mousemove', function(evt) {	
+		var mousePos = calculateMousePos(evt);
+		paddle1Y = mousePos.y - (PADDLE_HEIGHT/2);
+	});
 }
