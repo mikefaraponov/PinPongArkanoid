@@ -23,6 +23,7 @@ function drawEverything() {
 
 	drawRect(canvas.width - PADDLE_THICKNESS, paddle2Y, PADDLE_THICKNESS, PADDLE_HEIGHT, 'white');
 
+	drowCircle(ballX, ballY, 10, 'white');
 }
 
 function drawNet() {
