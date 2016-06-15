@@ -6,6 +6,10 @@ var ballY = 50;
 var ballSpeedX = 10;
 var ballSpeedY = 5;
 
+var player1Score = 0;
+var player2Score = 0;
+const WINNING_SCORE = 3;
+
 var paddle1Y = 250;
 var paddle2Y = 250;
 const PADDLE_THICKNESS = 10;
@@ -29,7 +33,19 @@ function ballReset() {
 	ballY = canvas.height / 2;
 }
 
+function computerMovement() {
+	var paddle2YCenter = paddle2Y + (PADDLE_HEIGHT / 2);
+	if(paddle2YCenter < ballY - 35) {
+		paddle2Y = paddle2Y + 6;
+	} else if(paddle2YCenter > ballY + 35) {
+		paddle2Y = paddle2Y - 6;
+	}
+}
+
 function moveEverything() {
+
+	computerMovement();
+
 	ballX = ballX + ballSpeedX;
 	ballY = ballY + ballSpeedY;
 	
@@ -38,7 +54,7 @@ function moveEverything() {
 			ballY < paddle1Y + PADDLE_HEIGHT) {
 			ballSpeedX = -ballSpeedX;
 
-			var deltaY = ballY (paddle1Y + PADDLE_HEIGHT / 2);
+			var deltaY = ballY -(paddle1Y + PADDLE_HEIGHT / 2);
 			ballSpeedY = deltaY * 0.35;
 		} else {
 			ballReset();
