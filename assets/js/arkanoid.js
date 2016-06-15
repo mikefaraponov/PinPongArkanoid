@@ -1,3 +1,4 @@
+
 var canvas;
 var ctx;
 var ballX = 50;
@@ -10,8 +11,44 @@ var paddle2Y = 250;
 const PADDLE_THICKNESS = 10;
 const PADDLE_HEIGHT = 100;
 
-function moveEverything() {
+function ballReset() {
+	ballSpeedX = -ballSpeedX;
+	ballX = canvas.width / 2;
+	ballY = canvas.height / 2;
+}
 
+function moveEverything() {
+	ballX = ballX + ballSpeedX;
+	ballY = ballY + ballSpeedY;
+	
+	if(ballX < 0) {
+		if(ballY > paddle1Y &&
+			ballY < paddle1Y + PADDLE_HEIGHT) {
+			ballSpeedX = -ballSpeedX;
+
+			var deltaY = ballY (paddle1Y + PADDLE_HEIGHT / 2);
+			ballSpeedY = deltaY * 0.35;
+		} else {
+			ballReset();
+		}
+	}
+	if(ballX > canvas.width) {
+		if(ballY > paddle2Y &&
+			ballY < paddle2Y + PADDLE_HEIGHT) {
+			ballSpeedX = -ballSpeedX;
+
+			var deltaY = ballY - (paddle2Y + PADDLE_HEIGHT / 2);
+			ballSpeedY = deltaY * 0.35;
+		} else {
+			ballReset();	
+		}
+	}
+	if(ballY < 0) {
+		ballSpeedY = -ballSpeedY;
+	}
+	if(ballY > canvas.height) {
+		ballSpeedY = -ballSpeedY;
+	}
 }
 
 function drawEverything() {
