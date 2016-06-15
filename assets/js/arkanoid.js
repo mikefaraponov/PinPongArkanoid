@@ -89,6 +89,8 @@ function moveEverything() {
 }
 
 function drawEverything() {
+	drawRect(0, 0, canvas.width, canvas.height, 'black');
+	
 	if(showingWinScreen) {
 		ctx.fillStyle = 'white';
 
@@ -102,11 +104,6 @@ function drawEverything() {
 		return;
 	}
 
-	ctx.fillText(player1Score, 100, 100);
-	ctx.fillText(player2Score, canvas.width-100, 100);
-
-	drawRect(0, 0, canvas.width, canvas.height, 'black');
-
 	drawNet();
 
 	drawRect(0, paddle1Y, PADDLE_THICKNESS, PADDLE_HEIGHT, 'white');
@@ -114,6 +111,9 @@ function drawEverything() {
 	drawRect(canvas.width - PADDLE_THICKNESS, paddle2Y, PADDLE_THICKNESS, PADDLE_HEIGHT, 'white');
 
 	drowCircle(ballX, ballY, 10, 'white');
+
+	ctx.fillText(player1Score, 100, 100);
+	ctx.fillText(player2Score, canvas.width-100, 100);
 }
 
 function drawNet() {
