@@ -9,12 +9,12 @@ var ballSpeedY = 5;
 var player1Score = 0;
 var player2Score = 0;
 const WINNING_SCORE = 3;
+var showingWinScreen = false;
 
 var paddle1Y = 250;
 var paddle2Y = 250;
 const PADDLE_THICKNESS = 10;
 const PADDLE_HEIGHT = 100;
-
 
 function calculateMousePos(evt) {
 	var rect = canvas.getBoundingClientRect();
@@ -28,6 +28,10 @@ function calculateMousePos(evt) {
 }
 
 function ballReset() {
+	if(player1Score >= WINNING_SCORE ||
+		player2Score >= WINNING_SCORE) {
+		showingWinScreen = true;
+	}
 	ballSpeedX = -ballSpeedX;
 	ballX = canvas.width / 2;
 	ballY = canvas.height / 2;
@@ -43,6 +47,9 @@ function computerMovement() {
 }
 
 function moveEverything() {
+	if(showingWinScreen) {
+		return;
+	}
 
 	computerMovement();
 
@@ -57,6 +64,7 @@ function moveEverything() {
 			var deltaY = ballY -(paddle1Y + PADDLE_HEIGHT / 2);
 			ballSpeedY = deltaY * 0.35;
 		} else {
+			player2Score++
 			ballReset();
 		}
 	}
@@ -68,6 +76,7 @@ function moveEverything() {
 			var deltaY = ballY - (paddle2Y + PADDLE_HEIGHT / 2);
 			ballSpeedY = deltaY * 0.35;
 		} else {
+			player1Score++
 			ballReset();	
 		}
 	}
@@ -80,6 +89,22 @@ function moveEverything() {
 }
 
 function drawEverything() {
+	if(showingWinScreen) {
+		ctx.fillStyle = 'white';
+
+		if(player1Score >= WINNING_SCORE) {
+			ctx.fillText("Left Player Won", 350, 200);
+		} else if(player2Score >= WINNING_SCORE) {
+			ctx.fillText("Right Player Won", 350, 200);
+		}
+
+		ctx.fillText("click to continue", 350, 500);
+		return;
+	}
+
+	ctx.fillText(player1Score, 100, 100);
+	ctx.fillText(player2Score, canvas.width-100, 100);
+
 	drawRect(0, 0, canvas.width, canvas.height, 'black');
 
 	drawNet();
@@ -110,6 +135,18 @@ function drawRect(leftX, topY, width, height, drawColor) {
 	ctx.fillRect(leftX,topY, width,height);
 }
 
+function handleMouseClick(evt) {
+	if(showingWinScreen) {
+		player1Score = 0;
+		player2Score = 0;
+		showingWinScreen = false;
+	}
+}
+
+function handleMouseMove(evt) {
+		var mousePos = calculateMousePos(evt);
+		paddle1Y = mousePos.y - (PADDLE_HEIGHT / 2);
+}
 
 window.onload = function() {
 	canvas = document.querySelector('.js-arkanoid');
@@ -124,8 +161,7 @@ window.onload = function() {
 			drawEverything();
 	}, 1000/fps);
 
-	canvas.addEventListener('mousemove', function(evt) {	
-		var mousePos = calculateMousePos(evt);
-		paddle1Y = mousePos.y - (PADDLE_HEIGHT/2);
-	});
+	canvas.addEventListener('mousemove', handleMouseMove);
+
+	canvas.addEventListener('mousedown', handleMouseClick);
 }
